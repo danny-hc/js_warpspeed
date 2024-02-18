@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warpspeed!</title>
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #universe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: black;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            top: 50vh;
+            left: 50vw;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="universe"></div>
+
+    <script>
+        const stars = 200;
+
+        for (let i = 0; i < stars; i++) {
+            let star = document.createElement('div');
+            star.id = 'star' + i;
+            star.className = 'star';
+
+            initStar(star);
+
+            document.getElementById("universe").appendChild(star);
+        }
+
+        function initStar(star) {
+            star.style.left = 49 + (Math.random() * 2) + "vw";
+            star.style.top = 49 + (Math.random() * 2) + "vh";
+
+            let size = 1 + Math.random() * 4;
+
+            star.style.width = size + "px";
+            star.style.height = size + "px";
+
+            star.dataset.speedX = -0.5 + Math.random();
+            star.dataset.speedY = -0.5 + Math.random();
+
+            blinkStar(star);
+        }
+
+        function blinkStar(star) {
+            let brightness_r = 100 + Math.round(Math.random() * 155);
+            let brightness_g = Math.min(255, brightness_r - 50 + Math.round(Math.random() * 100));
+            let brightness_b = Math.min(255, brightness_r - 50 + Math.round(Math.random() * 100));
+
+            star.style.backgroundColor = "rgb(" + brightness_r + "," + brightness_g + "," + brightness_b + ")";
+        }
+
+        function moveStars() {
+            for(let i = 0; i < stars; i++) {
+                let star = document.getElementById('star' + i);
+         
+                let x = parseFloat(star.style.left) + parseFloat(star.dataset.speedX);
+                let y = parseFloat(star.style.top) + parseFloat(star.dataset.speedY);
+
+                star.style.left = x + 'vw';
+                star.style.top = y + 'vh';
+
+                if (x < 0 || x > 100 || y < 0 || y > 100) {
+                    initStar(star);
+                }
+            }
+
+            setTimeout(moveStars, 10);
+        }
+
+        setTimeout(moveStars, 10);
+    </script>
+</body>
+</html>
